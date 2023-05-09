@@ -11,15 +11,17 @@ canvas.height = height;
 
 body[0].appendChild(canvas);
 
-const camPos = {x: 10, y: 10, z: 10};
-const direction = {x: 0, y: 0, z: 0};
+const camPos = {x: 5, y: 5, z: 5};
+const pointToLook = {x: 0, y: 0, z: 0};
 
 const face = [{x: 1, y: 1, z: 0}, {x: 1, y: 0, z: 1}, {x: 0, y: 1, z: 1}];
+const face2 = [{x: 0, y: 0, z: 0}, {x: 3, y: 0, z: 0}, {x: 0, y: 0, z: 3}];
+const faces = [face, face2];
 
 const image = ctx.createImageData(width, height);
 let pp = 0;
 const upVector = {x: 1, y: 0, z: 0};
-const directionVector = subVector(direction, camPos);
+const directionVector = subVector(pointToLook, camPos);
 const trans = crossProductVector(upVector, directionVector);
 let trans2 = crossProductVector(trans, directionVector);
 
@@ -33,17 +35,19 @@ for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
         const sw = i - wMiddle;
 
-        // const rayPos = addVector(addVector(direction, mulScalarVector(sw / wMiddle, trans)), mulScalarVector(sh / hMiddle, trans2));
-        const rayPos = addVector(addVector(direction, mulScalarVector(sw / wMiddle, trans)), mulScalarVector(sh / hMiddle, trans2));
-        // console.log(rayPos)
-        const proj = projectionInPlane(face, camPos, subVector(rayPos, camPos));
-        const si = proj.collide;
+        for(let face of faces) {
+            // const rayPos = addVector(addVector(direction, mulScalarVector(sw / wMiddle, trans)), mulScalarVector(sh / hMiddle, trans2));
+            const rayPos = addVector(addVector(pointToLook, mulScalarVector(sw / wMiddle, trans)), mulScalarVector(sh / hMiddle, trans2));
+            // console.log(rayPos)
+            const proj = projectionInPlane(face, camPos, subVector(rayPos, camPos));
+            const si = proj.collide;
 
-        image.data[pp] = si ? 255 : 0;
-        image.data[pp + 1] = 0;
-        image.data[pp + 2] = si ? 0 : 255;
-        image.data[pp + 3] = 255;
-        pp += 4;
+            image.data[pp] = si ? 255 : 0;
+            image.data[pp + 1] = 0;
+            image.data[pp + 2] = si ? 0 : 255;
+            image.data[pp + 3] = 255;
+            pp += 4;
+        }
     }
 }
 

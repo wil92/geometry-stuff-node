@@ -59,7 +59,7 @@ function projectionInPlane(plane, point, direction) {
         const u = mulVector(crossProductVector(p02, mulScalarVector(-1, kab)), subVector(point, plane[0])) / d;
         const v = mulVector(crossProductVector(mulScalarVector(-1, kab), p01), subVector(point, plane[0])) / d;
 
-        collide = t >= 0 && t <= 1 && u + v <= 1 && u >= 0 && v <= 1 && u >= 0 && u <= 1;
+        collide = t >= 0 && t <= 1 && u + v <= 1 && v >= 0 && v <= 1 && u >= 0 && u <= 1;
         dist = distance(distanceVector);
     }
 
